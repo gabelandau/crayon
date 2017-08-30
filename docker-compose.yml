@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    container_name: crayon_mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  php:
+    build: ./php
+    container_name: crayon_php
+    ports:
+      - '8000:80'
+    restart: always
+    volumes:
+      - ./html:/var/www/html
+    depends_on:
+      - db
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: crayon_phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - /sessions
+
+volumes:
+    db_data:
